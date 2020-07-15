@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { runValidation } = require('../utils/middleware/validators');
 
 const Tag = require('../models/Tag');
+const { runValidation } = require('../utils/middleware/validators');
 const { tagsValidator } = require('../utils/middleware/validators/tags');
 
 router.get(
