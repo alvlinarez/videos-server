@@ -9,7 +9,11 @@ const config = require('./config/env');
 const connectionDB = require('./config/db');
 // routes
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/users');
+const movieRoutes = require('./routes/movies');
+const playlistRoutes = require('./routes/playlists');
+const ratingRoutes = require('./routes/ratings');
+const tagRoutes = require('./routes/tags');
 
 // Custom middleware
 const notFoundHandler = require('./utils/middleware/notFoundHandler');
@@ -27,6 +31,10 @@ app.use(cors());
 // routes
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', movieRoutes);
+app.use('/api', playlistRoutes);
+app.use('/api', ratingRoutes);
+app.use('/api', tagRoutes);
 
 // 404 middleware
 app.use(notFoundHandler);

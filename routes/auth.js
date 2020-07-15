@@ -8,7 +8,6 @@ const config = require('../config/env'); // env variables
 // Validators
 const { runValidation } = require('../utils/middleware/validators');
 const {
-  userSignInValidator,
   userSignUpValidator
 } = require('../utils/middleware/validators/auth');
 
