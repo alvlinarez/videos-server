@@ -89,4 +89,38 @@ router.put(
   }
 );
 
+router.put(
+  '/playlists/removeMovie',
+  passport.authenticate('jwt', { session: false }),
+  playlistsValidator,
+  runValidation,
+  async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(400).json({
+          error: 'User is not logged in'
+        });
+      }
+      const userId = req.user.id;
+      const { movieId } = req.body;
+      if (!movieId) {
+        return res.status(400).json({ error: 'Movie to add not found' });
+      }
+      const playlist = await Playlist.findOneAndUpdate(
+        { user: userId },
+        { $pull: { movies: movieId } },
+        { new: true }
+      );
+      if (!playlist) {
+        return res.status(400).json({ error: 'Playlist not found' });
+      }
+      return res.json(playlist);
+    } catch (e) {
+      return res.status(400).json({
+        error: e.message
+      });
+    }
+  }
+);
+
 module.exports = router;
