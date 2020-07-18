@@ -10,11 +10,12 @@ const {
 
 const { getPlaylist } = require('../utils/service/playlist');
 // router.get(
-//   '/playlists',
+//   '/playlists/:id',
 //   passport.authenticate('jwt', { session: false }),
 //   async (req, res) => {
+//     const id = req.params.id;
 //     try {
-//       const playlists = await Playlist.find();
+//       const playlists = await Playlist.findOne({ _id: id });
 //       return res.json(playlists);
 //     } catch (e) {
 //       return res.status(400).json({
@@ -34,14 +35,16 @@ router.get(
           error: 'User is not logged in'
         });
       }
-      const { id } = req.user;
-      let playlist = await Playlist.findOne({ userId: id });
+      const userId = req.user.id;
+      let playlist = await Playlist.findOne({ user: userId });
       if (!playlist) {
         playlist = new Playlist({
-          userId: id,
+          user: userId,
           movies: []
         });
         playlist = await playlist.save();
+        //playlist = await playlist.populateFields();
+        playlist = await playlist.populate('user').execPopulate();
       }
       return res.json(playlist);
     } catch (e) {
@@ -64,24 +67,18 @@ router.put(
           error: 'User is not logged in'
         });
       }
-      const { id } = req.user;
+      const userId = req.user.id;
       const { movieId } = req.body;
       if (!movieId) {
         return res.status(400).json({ error: 'Movie to add not found' });
       }
-      const _playlist = await Playlist.findOneAndUpdate(
-        { userId: id },
+      const playlist = await Playlist.findOneAndUpdate(
+        { user: userId },
         { $addToSet: { movies: movieId } },
         { new: true }
       );
-      if (!_playlist) {
+      if (!playlist) {
         return res.status(400).json({ error: 'Playlist not found' });
-      }
-      const { error, playlist } = await getPlaylist(id);
-      if (error) {
-        return res.status(400).json({
-          error
-        });
       }
       return res.json(playlist);
     } catch (e) {

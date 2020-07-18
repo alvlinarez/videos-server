@@ -12,15 +12,11 @@ const passportJwtOptions = {
 passport.use(
   new Strategy(passportJwtOptions, async (tokenPayload, done) => {
     try {
-      let user = await User.findOne({ email: tokenPayload.email }).select(
-        '-hashedPassword -salt -__v'
-      );
+      let user = await User.findOne({ email: tokenPayload.email });
       if (!user) {
         return done({ error: 'User not found.' }, false);
       }
-      user = user.toObject();
-      user.id = user._id;
-      delete user._id;
+      user = await user.toJSON();
       return done(null, user);
     } catch (e) {
       return done({ error: e.message });

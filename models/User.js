@@ -27,6 +27,18 @@ const userSchema = mongoose.Schema(
   }
 );
 
+// Replace _id to id, and delete hashedPassword, salt and __v in responses
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.hashedPassword;
+    delete ret.salt;
+    delete ret.__v;
+  }
+});
+
 // virtual password
 userSchema
   .virtual('password')

@@ -12,6 +12,8 @@ const facebookOptions = {
   profileFields: ['id', 'email', 'first_name', 'last_name']
 };
 
+const { createUser } = require('../common/createUser');
+
 passport.use(
   new FacebookStrategy(
     facebookOptions,
@@ -24,46 +26,50 @@ passport.use(
         try {
           let user = await User.findOne({ email });
           if (user) {
-            user = user.toObject();
-            const { _id, email, name } = user;
+            user = await user.toJSON();
             const payload = {
-              sub: _id,
-              name,
+              sub: user.id,
+              name: user.name,
               email
             };
-            user.id = user._id;
-            delete user._id;
-            delete user.hashedPassword;
             const token = jwt.sign(payload, config.jwtSecret, {
               expiresIn: '7d'
             });
             return done(null, { user, token });
           } else {
-            let password = email + config.jwtSecret;
-            user = new User({
+            user = {
               name: first_name + ' ' + last_name,
               email,
-              password
-            });
-            try {
-              user = await user.save();
-              user = user.toObject();
-              const { _id, name } = user;
-              const payload = {
-                sub: _id,
-                name,
-                email
-              };
-              user.id = user._id;
-              delete user._id;
-              delete user.hashedPassword;
-              const token = jwt.sign(payload, config.jwtSecret, {
-                expiresIn: '7d'
-              });
-              return done(null, { user, token });
-            } catch (e) {
-              return done({ error: e.message });
+              password: email + config.jwtSecret
+            };
+            const { res, error } = await createUser(user);
+            if (error) {
+              return done({ error });
             }
+            return done(null, res);
+
+            // user = new User({
+            //   name,
+            //   email,
+            //   password
+            // });
+            // try {
+            //   user = await user.save();
+            //   user = user.toJSON();
+            //   const payload = {
+            //     sub: user.id,
+            //     name,
+            //     email
+            //   };
+            //   const token = jwt.sign(payload, config.jwtSecret, {
+            //     expiresIn: '7d'
+            //   });
+            //
+            //
+            //   return done(null, { user, token });
+            // } catch (e) {
+            //   return done({ error: e.message });
+            // }
           }
         } catch (e) {
           return done({ error: e.message });
