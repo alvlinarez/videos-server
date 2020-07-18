@@ -1,17 +1,16 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const jwt = require('jsonwebtoken');
-const User = require('../../../models/User');
 
 const config = require('../../../config/env');
+const User = require('../../../models/User');
+const { createUser } = require('../common/createUserOauth');
 
 const googleOptions = {
   clientID: config.googleClientId,
   clientSecret: config.googleClientSecret,
   callbackURL: '/api/auth/google/callback'
 };
-
-const { createUser } = require('../common/createUser');
 
 passport.use(
   new GoogleStrategy(

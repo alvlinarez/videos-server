@@ -2,23 +2,22 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-const Rating = require('../models/Rating');
+// Validators
 const { runValidation } = require('../utils/middleware/validators');
 const { ratingsValidator } = require('../utils/middleware/validators/ratings');
+// Controller
+const ratingController = require('../controllers/ratingController');
 
 router.get(
   '/ratings',
   passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    try {
-      const ratings = await Rating.find();
-      return res.json(ratings);
-    } catch (e) {
-      return res.status(400).json({
-        error: e.message
-      });
-    }
-  }
+  ratingController.getRatings
+);
+
+router.get(
+  '/ratings/:id',
+  passport.authenticate('jwt', { session: false }),
+  ratingController.getRatingById
 );
 
 router.post(
@@ -26,24 +25,7 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   ratingsValidator,
   runValidation,
-  async (req, res) => {
-    try {
-      const { name } = req.body;
-      let rating = await Rating.findOne({ name });
-      if (rating) {
-        return res.status(400).json({
-          error: 'Rating with that name already exists'
-        });
-      }
-      rating = new Rating({ name });
-      rating = await rating.save();
-      return res.json(rating);
-    } catch (e) {
-      return res.status(400).json({
-        error: e.message
-      });
-    }
-  }
+  ratingController.createRating
 );
 
 module.exports = router;

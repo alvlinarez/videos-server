@@ -46,6 +46,25 @@ const movieSchema = mongoose.Schema({
   ]
 });
 
+// Method to fill tags and ratings
+const autoPopulate = function (next) {
+  this.populate([
+    {
+      path: 'tags'
+    },
+    {
+      path: 'contentRating'
+    }
+  ]);
+  next();
+};
+
+movieSchema
+  .pre('find', autoPopulate)
+  .pre('findOne', autoPopulate)
+  .pre('findOneAndUpdate', autoPopulate)
+  .pre('findById', autoPopulate);
+
 movieSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,

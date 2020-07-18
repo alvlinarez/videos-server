@@ -1,9 +1,10 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../../../models/User');
 const jwt = require('jsonwebtoken');
 
 const config = require('../../../config/env');
+const User = require('../../../models/User');
+const { createUser } = require('../common/createUserOauth');
 
 const facebookOptions = {
   clientID: config.facebookClientId,
@@ -11,8 +12,6 @@ const facebookOptions = {
   callbackURL: '/api/auth/facebook/callback',
   profileFields: ['id', 'email', 'first_name', 'last_name']
 };
-
-const { createUser } = require('../common/createUser');
 
 passport.use(
   new FacebookStrategy(

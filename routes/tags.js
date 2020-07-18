@@ -2,23 +2,21 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-const Tag = require('../models/Tag');
 const { runValidation } = require('../utils/middleware/validators');
 const { tagsValidator } = require('../utils/middleware/validators/tags');
+// Controller
+const tagController = require('../controllers/tagController');
 
 router.get(
   '/tags',
   passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    try {
-      const tags = await Tag.find();
-      return res.json(tags);
-    } catch (e) {
-      return res.status(400).json({
-        error: e.message
-      });
-    }
-  }
+  tagController.getTags
+);
+
+router.get(
+  '/tags/:id',
+  passport.authenticate('jwt', { session: false }),
+  tagController.getTagById
 );
 
 router.post(
@@ -26,24 +24,7 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   tagsValidator,
   runValidation,
-  async (req, res) => {
-    try {
-      const { name } = req.body;
-      let tag = await Tag.findOne({ name });
-      if (tag) {
-        return res.status(400).json({
-          error: 'Tag with that name already exists'
-        });
-      }
-      tag = new Tag({ name });
-      tag = await tag.save();
-      return res.json(tag);
-    } catch (e) {
-      return res.status(400).json({
-        error: e.message
-      });
-    }
-  }
+  tagController.createTag
 );
 
 module.exports = router;
