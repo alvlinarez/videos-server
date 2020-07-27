@@ -28,7 +28,7 @@ const movieSchema = mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
-    max: 3000
+    max: 14400
   },
   contentRating: {
     type: mongoose.Schema.Types.ObjectId,
@@ -43,7 +43,15 @@ const movieSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Tag'
     }
-  ]
+  ],
+  timesWatched: {
+    type: Number,
+    default: 0
+  },
+  original: {
+    type: Boolean,
+    default: false
+  }
 });
 
 // Method to fill tags and ratings

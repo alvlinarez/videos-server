@@ -11,7 +11,7 @@ const authController = require('../controllers/authController');
 
 // Sign up route
 router.post(
-  '/signup',
+  '/auth/signup',
   userSignUpValidator,
   runValidation,
   authController.signUpUser
@@ -20,7 +20,7 @@ router.post(
 // Sign in route
 // Basic Strategy
 require('../utils/auth/strategies/basic');
-router.post('/signin', authController.signInUser);
+router.post('/auth/signin', authController.signInUser);
 
 // Facebook Strategy
 require('../utils/auth/strategies/facebook');
