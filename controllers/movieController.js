@@ -1,8 +1,18 @@
 const Movie = require('../models/Movie');
 
 exports.getMovies = async (req, res) => {
+  const { originals, mostWatched } = req.query;
   try {
-    const movies = await Movie.find();
+    let movies = [];
+    if (originals) {
+      movies = await Movie.find({ original: true });
+      return res.json(movies);
+    }
+    if (mostWatched) {
+      movies = await Movie.find().sort({ timesWatched: -1 }).limit(7);
+      return res.json(movies);
+    }
+    movies = await Movie.find();
     return res.json(movies);
   } catch (e) {
     return res.status(400).json({
@@ -18,7 +28,11 @@ exports.getMovieById = async (req, res) => {
       error: 'movieId not found'
     });
   }
-  const movie = await Movie.findById(movieId);
+  const movie = await Movie.findOneAndUpdate(
+    { _id: movieId },
+    { $inc: { timesWatched: 1 } },
+    { new: true }
+  );
   if (!movie) {
     return res.status(400).json({
       error: 'Movie not found'
