@@ -45,26 +45,6 @@ passport.use(
               return done({ error });
             }
             return done(null, res);
-            // user = new User({
-            //   name,
-            //   email,
-            //   password
-            // });
-            // try {
-            //   user = await user.save();
-            //   user = user.toJSON();
-            //   const payload = {
-            //     sub: user.id,
-            //     name,
-            //     email
-            //   };
-            //   const token = jwt.sign(payload, config.jwtSecret, {
-            //     expiresIn: '7d'
-            //   });
-            //   return done(null, { user, token });
-            // } catch (e) {
-            //   return done({ error: e.message });
-            // }
           }
         } catch (e) {
           return done({ error: e.message });

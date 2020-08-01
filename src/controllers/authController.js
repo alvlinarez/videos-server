@@ -242,10 +242,7 @@ exports.customSignIn = (req, res) => {
           error: err.error
         });
       }
-      res.cookie('token', data.token, {
-        httpOnly: config.env !== 'development',
-        secure: config.env !== 'development'
-      });
+      res.cookie('token', data.token);
       return res.redirect(`${config.clientUrl}auth/oauth`);
     });
   };
