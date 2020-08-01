@@ -2,7 +2,7 @@
   "name": "alg-videos-server",
   "version": "1.0.0",
   "description": "Website server where the user can save playlists and watch videos. Made with React and Express",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
