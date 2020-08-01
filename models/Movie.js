@@ -51,6 +51,12 @@ const movieSchema = mongoose.Schema({
   original: {
     type: Boolean,
     default: false
+  },
+  series: {
+    type: String,
+    trim: true,
+    max: 80,
+    default: ''
   }
 });
 

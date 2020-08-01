@@ -30,5 +30,6 @@ exports.moviesValidator = [
     .withMessage('Duration is required.')
     .isNumeric()
     .withMessage('Duration must be numeric'),
-  check('source').not().isEmpty().withMessage('Source is required.')
+  check('source').not().isEmpty().withMessage('Source is required.'),
+  check('series').isLength({ max: 80 }).withMessage('Series is too long')
 ];

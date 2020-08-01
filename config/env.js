@@ -3,6 +3,7 @@ require('dotenv').config();
 const {
   NODE_ENV,
   PORT,
+  CLIENT_URL,
   DB_MONGO,
   JWT_SECRET,
   FACEBOOK_CLIENT_ID,
@@ -14,6 +15,7 @@ const {
 module.exports = {
   env: NODE_ENV,
   port: PORT,
+  clientUrl: CLIENT_URL,
   dbMongo: DB_MONGO,
   jwtSecret: JWT_SECRET,
   facebookClientId: FACEBOOK_CLIENT_ID,

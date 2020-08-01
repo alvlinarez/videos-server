@@ -87,10 +87,7 @@ exports.customSignIn = (req, res) => {
         httpOnly: config.env !== 'development',
         secure: config.env !== 'development'
       });
-      return res.status(200).json({
-        token: data.token,
-        user: data.user
-      });
+      return res.redirect(`${config.clientUrl}auth/oauth`);
     });
   };
 };
