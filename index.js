@@ -4,19 +4,19 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 // environment variables
-const config = require('./config/env');
+const config = require('./src/config/env');
 // DB connection
-const connectionDB = require('./config/db');
+const connectionDB = require('./src/config/db');
 // routes
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const movieRoutes = require('./routes/movies');
-const playlistRoutes = require('./routes/playlists');
-const ratingRoutes = require('./routes/ratings');
-const tagRoutes = require('./routes/tags');
+const authRoutes = require('./src/routes/auth');
+const userRoutes = require('./src/routes/users');
+const movieRoutes = require('./src/routes/movies');
+const playlistRoutes = require('./src/routes/playlists');
+const ratingRoutes = require('./src/routes/ratings');
+const tagRoutes = require('./src/routes/tags');
 
 // Custom middleware
-const notFoundHandler = require('./utils/middleware/notFoundHandler');
+const notFoundHandler = require('./src/utils/middleware/notFoundHandler');
 
 // Initializing connection to DB
 connectionDB();

@@ -20,7 +20,7 @@ exports.getTagById = async (req, res) => {
     }
     const idTag = req.params.id;
     const tag = await Tag.findById(idTag);
-    if(!tag) {
+    if (!tag) {
       return res.status(400).json({
         error: 'Tag not found'
       });
