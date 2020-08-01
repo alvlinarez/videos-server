@@ -20,7 +20,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    salt: String
+    salt: String,
+    resetPasswordLink: {
+      data: String,
+      default: ''
+    }
   },
   {
     timestamps: true

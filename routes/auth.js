@@ -4,7 +4,11 @@ const passport = require('passport');
 
 // Validators
 const { runValidation } = require('../utils/middleware/validators');
-const { userSignUpValidator } = require('../utils/middleware/validators/auth');
+const {
+  userSignUpValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator
+} = require('../utils/middleware/validators/auth');
 
 // Controllers
 const authController = require('../controllers/authController');
@@ -15,6 +19,21 @@ router.post(
   userSignUpValidator,
   runValidation,
   authController.signUpUser
+);
+router.post('/auth/account-activation', authController.accountActivation);
+
+// forgot reset password routes
+router.put(
+  '/auth/forgot-password',
+  forgotPasswordValidator,
+  runValidation,
+  authController.forgotPassword
+);
+router.put(
+  '/auth/reset-password',
+  resetPasswordValidator,
+  runValidation,
+  authController.resetPassword
 );
 
 // Sign in route
