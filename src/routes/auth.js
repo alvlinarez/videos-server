@@ -41,6 +41,21 @@ router.put(
 require('../utils/auth/strategies/basic');
 router.post('/auth/signin', authController.signInUser);
 
+router.post('/auth/signin-provider', authController.signInProvider);
+
+// Get authenticated user
+router.get(
+  '/auth/user',
+  //passport.authenticate('jwt', { session: false }),
+  authController.getAuthenticatedUser
+);
+
+router.get(
+  '/auth/signout',
+  passport.authenticate('jwt', { session: false }),
+  authController.signOutUser
+);
+
 // Facebook Strategy
 require('../utils/auth/strategies/facebook');
 router.get(

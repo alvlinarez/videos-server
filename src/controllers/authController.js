@@ -213,7 +213,7 @@ exports.signInUser = (req, res) => {
         expiresIn: '7d'
       });
       res.cookie('token', token, {
-        httpOnly: config.env !== 'development',
+        httpOnly: true,
         secure: config.env !== 'development'
       });
       return res.status(200).json({
@@ -226,6 +226,96 @@ exports.signInUser = (req, res) => {
       });
     });
   })(req, res);
+};
+
+exports.signInProvider = async (req, res) => {
+  const { name, email } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({
+      error: 'Name and email are required'
+    });
+  }
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      user = await user.toJSON();
+      const payload = {
+        sub: user.id,
+        name: user.name,
+        email
+      };
+      const token = jwt.sign(payload, config.jwtSecret, {
+        expiresIn: '7d'
+      });
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: config.env !== 'development'
+      });
+      return res.status(200).json({
+        token,
+        user: {
+          id: user.id,
+          name,
+          email
+        }
+      });
+    } else {
+      user = new User({
+        name,
+        email,
+        password: email + config.jwtSecret
+      });
+      try {
+        user = await user.save();
+        user = user.toJSON();
+        const payload = {
+          sub: user.id,
+          name: user.name,
+          email: user.email
+        };
+        const token = jwt.sign(payload, config.jwtSecret, {
+          expiresIn: '7d'
+        });
+        res.cookie('token', token, {
+          httpOnly: true,
+          secure: config.env !== 'development'
+        });
+        return res.status(200).json({
+          token,
+          user: {
+            id: user.id,
+            name,
+            email
+          }
+        });
+      } catch (e) {
+        return res.status(400).json({ error: e.message });
+      }
+    }
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+};
+
+exports.getAuthenticatedUser = (req, res) => {
+  if (req.cookies.token) {
+    const { sub, name, email } = jwt.decode(req.cookies.token);
+    return res.status(200).json({ id: sub, email, name });
+  } else {
+    return res.status(200).json({});
+  }
+};
+
+exports.signOutUser = (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({
+      error: 'User not signed in'
+    });
+  }
+  res.clearCookie('token');
+  return res.status(200).json({
+    message: 'Signed out successfully'
+  });
 };
 
 exports.customSignIn = (req, res) => {
@@ -242,7 +332,10 @@ exports.customSignIn = (req, res) => {
           error: err.error
         });
       }
-      res.cookie('token', data.token);
+      res.cookie('token', data.token, {
+        httpOnly: true,
+        secure: config.env !== 'development'
+      });
       return res.redirect(`${config.clientUrl}auth/oauth`);
     });
   };

@@ -4,8 +4,13 @@ const User = require('../../../models/User');
 
 const config = require('../../../config/env');
 
+const getCookie = (req) => {
+  return req.cookies.token || null;
+};
+
 const passportJwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: getCookie,
   secretOrKey: config.jwtSecret
 };
 
