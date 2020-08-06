@@ -31,8 +31,8 @@ app.use(
   cors({
     //origin: ['http://localhost:3000'],
     origin: [
-      'https://alv-videos.herokuapp.com',
-      'http://alv-videos.herokuapp.com'
+      'https://cors-anywhere.herokuapp.com/http://alv-videos.herokuapp.com',
+      'https://cors-anywhere.herokuapp.com/https://alv-videos.herokuapp.com'
     ],
     credentials: true
   })
