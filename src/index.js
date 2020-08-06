@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(
   cors({
     //origin: ['http://localhost:3000'],
-    origin: ['https://alv-videos.herokuapp.com'],
+    origin: ['http://alv-videos.herokuapp.com'],
     credentials: true
   })
 );
