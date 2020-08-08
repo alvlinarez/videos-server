@@ -214,7 +214,7 @@ exports.signInUser = (req, res) => {
       });
       res.cookie('token', token, {
         httpOnly: true,
-        //secure: config.env !== 'development'
+        secure: config.env !== 'development'
       });
       return res.status(200).json({
         token,
@@ -249,7 +249,7 @@ exports.signInProvider = async (req, res) => {
       });
       res.cookie('token', token, {
         httpOnly: true,
-        //secure: config.env !== 'development'
+        secure: config.env !== 'development'
       });
       return res.status(200).json({
         token,
@@ -278,7 +278,7 @@ exports.signInProvider = async (req, res) => {
         });
         res.cookie('token', token, {
           httpOnly: true,
-          //secure: config.env !== 'development'
+          secure: config.env !== 'development'
         });
         return res.status(200).json({
           token,
@@ -334,7 +334,7 @@ exports.customSignIn = (req, res) => {
       }
       res.cookie('token', data.token, {
         httpOnly: true,
-        //secure: config.env !== 'development'
+        secure: config.env !== 'development'
       });
       return res.redirect(`${config.clientUrl}auth/oauth`);
     });
