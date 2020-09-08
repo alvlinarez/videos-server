@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const authSsr = require('../utils/middleware/authSsr');
 
 // Validators
 const { runValidation } = require('../utils/middleware/validators');
@@ -14,6 +15,8 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   movieController.getMovies
 );
+
+router.post('/moviesSsr', authSsr, movieController.getMovies);
 
 router.get(
   '/movies/:id',

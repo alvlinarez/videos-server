@@ -50,6 +50,9 @@ router.get(
   authController.getAuthenticatedUser
 );
 
+// Get authenticated user SSR
+router.post('/auth', authController.getAuthenticatedUserSsr);
+
 router.get(
   '/auth/signout',
   passport.authenticate('jwt', { session: false }),

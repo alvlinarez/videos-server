@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const authSsr = require('../utils/middleware/authSsr');
 
 // Validators
 const { runValidation } = require('../utils/middleware/validators');
@@ -14,6 +15,12 @@ const playlistController = require('../controllers/playlistController');
 router.get(
   '/playlists/byUser',
   passport.authenticate('jwt', { session: false }),
+  playlistController.getPlaylistByUser
+);
+
+router.post(
+  '/playlists/byUserSsr',
+  authSsr,
   playlistController.getPlaylistByUser
 );
 

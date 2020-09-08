@@ -306,6 +306,20 @@ exports.getAuthenticatedUser = (req, res) => {
   }
 };
 
+exports.getAuthenticatedUserSsr = (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(200).json({});
+  } else {
+    try {
+      const { sub, name, email } = jwt.verify(token, config.jwtSecret);
+      return res.status(200).json({ id: sub, email, name });
+    } catch (e) {
+      return res.status(200).json({});
+    }
+  }
+};
+
 exports.signOutUser = (req, res) => {
   if (!req.user) {
     return res.status(401).json({
